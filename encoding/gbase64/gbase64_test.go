@@ -7,8 +7,10 @@
 package gbase64_test
 
 import (
-	"github.com/gogf/gf/debug/gdebug"
+	"reflect"
 	"testing"
+
+	"github.com/gogf/gf/debug/gdebug"
 
 	"github.com/gogf/gf/encoding/gbase64"
 	"github.com/gogf/gf/test/gtest"
@@ -93,4 +95,30 @@ func Test_File_Error(t *testing.T) {
 		t.AssertNE(err, nil)
 		t.Assert(s, expect)
 	})
+}
+
+func TestEncodeToBase64Keys(t *testing.T) {
+	type args struct {
+		data string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{name: "Hi goframe",
+			args: args{"Hi goframe"},
+			want: []string{"SGkgZ29mcmFtZ", "hpIGdvZnJhbW", "IaSBnb2ZyYW1l"}},
+		// Wikipedia examples
+		{name: "sure.",
+			args: args{"sure."},
+			want: []string{"c3VyZS", "N1cmUu", "zdXJlL"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := gbase64.EncodeToBase64Keys(tt.args.data); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("EncodeToBase64Keys() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

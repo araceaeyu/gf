@@ -115,3 +115,18 @@ func MustDecodeToString(data string) string {
 	}
 	return result
 }
+
+// EncodeToBase64Keys generates three possible BASE64 permutations for the given string.
+func EncodeToBase64Keys(data string) []string {
+	var result []string
+	dropResultHead := []int{0, 2, 3}
+	dropResultTail := []int{0, 3, 2}
+	for i := 0; i < 3; i++ {
+		b := EncodeString(data)
+		start := dropResultHead[i]
+		end := len(b) - dropResultTail[len(data)%3]
+		result = append(result, b[start:end])
+		data = "-" + data
+	}
+	return result
+}
